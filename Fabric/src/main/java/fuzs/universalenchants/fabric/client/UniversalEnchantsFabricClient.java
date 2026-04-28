@@ -1,8 +1,8 @@
 package fuzs.universalenchants.fabric.client;
 
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
-import fuzs.universalenchants.UniversalEnchants;
-import fuzs.universalenchants.client.UniversalEnchantsClient;
+import fuzs.universalenchants.common.UniversalEnchants;
+import fuzs.universalenchants.common.client.UniversalEnchantsClient;
 import net.fabricmc.api.ClientModInitializer;
 
 public class UniversalEnchantsFabricClient implements ClientModInitializer {

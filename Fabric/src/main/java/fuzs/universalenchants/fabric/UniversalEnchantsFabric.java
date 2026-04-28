@@ -1,7 +1,7 @@
 package fuzs.universalenchants.fabric;
 
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
-import fuzs.universalenchants.UniversalEnchants;
+import fuzs.universalenchants.common.UniversalEnchants;
 import net.fabricmc.api.ModInitializer;
 
 public class UniversalEnchantsFabric implements ModInitializer {

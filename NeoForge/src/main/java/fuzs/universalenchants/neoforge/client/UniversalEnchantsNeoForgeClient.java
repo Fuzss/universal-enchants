@@ -1,8 +1,8 @@
 package fuzs.universalenchants.neoforge.client;
 
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
-import fuzs.universalenchants.UniversalEnchants;
-import fuzs.universalenchants.client.UniversalEnchantsClient;
+import fuzs.universalenchants.common.UniversalEnchants;
+import fuzs.universalenchants.common.client.UniversalEnchantsClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.Mod;
 
