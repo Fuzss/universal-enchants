@@ -1,12 +1,12 @@
 package fuzs.universalenchants.handler;
 
-import fuzs.puzzleslib.api.event.v1.core.EventResult;
-import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
-import fuzs.puzzleslib.api.event.v1.data.MutableInt;
-import fuzs.puzzleslib.api.event.v1.data.MutableValue;
-import fuzs.puzzleslib.api.item.v2.EnchantingHelper;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
-import fuzs.puzzleslib.api.network.v4.PlayerSet;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableFloat;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableInt;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableValue;
+import fuzs.puzzleslib.common.api.item.v2.EnchantingHelper;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
+import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import fuzs.universalenchants.UniversalEnchants;
 import fuzs.universalenchants.config.ServerConfig;
 import fuzs.universalenchants.network.ClientboundStopUsingItemMessage;

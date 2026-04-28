@@ -1,7 +1,7 @@
 package fuzs.universalenchants.data;
 
-import fuzs.puzzleslib.api.data.v2.AbstractDatapackRegistriesProvider;
-import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v2.AbstractDatapackRegistriesProvider;
+import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import fuzs.universalenchants.init.ModRegistry;
 import net.minecraft.core.registries.Registries;
 

@@ -1,7 +1,7 @@
 package fuzs.universalenchants.init;
 
-import fuzs.puzzleslib.api.data.v2.AbstractDatapackRegistriesProvider;
-import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
+import fuzs.puzzleslib.common.api.data.v2.AbstractDatapackRegistriesProvider;
+import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalenchants.UniversalEnchants;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderGetter;

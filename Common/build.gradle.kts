@@ -9,5 +9,6 @@ dependencies {
 multiloader {
     mixins {
         mixin("LivingEntityMixin", "PlayerMixin", "ThrownTridentMixin")
+        accessor("Enchantment\u0024EnchantmentDefinitionAccessor", "EnchantmentAccessor")
     }
 }

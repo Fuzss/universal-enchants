@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "universalenchants",
         "group": "fuzs.universalenchants",
         "name": "Universal Enchants",
-        "version": "21.11.2",
+        "version": "26.1.0",
         "authors": [
             "Fuzs"
         ],
@@ -36,13 +37,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "universalenchants"
-        },
-        {
             "name": "curseforge",
             "slug": "universal-enchants",
             "id": "593958"
+        },
+        {
+            "name": "github",
+            "slug": "universal-enchants"
         },
         {
             "name": "modrinth",

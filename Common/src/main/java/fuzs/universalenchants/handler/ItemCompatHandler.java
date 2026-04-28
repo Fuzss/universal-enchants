@@ -1,19 +1,18 @@
 package fuzs.universalenchants.handler;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.puzzleslib.api.event.v1.core.EventResult;
-import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
-import fuzs.puzzleslib.api.event.v1.data.MutableInt;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableFloat;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableInt;
 import fuzs.universalenchants.core.AndHolderSet;
 import fuzs.universalenchants.core.NotHolderSet;
 import fuzs.universalenchants.core.OrHolderSet;
 import fuzs.universalenchants.init.ModRegistry;
+import fuzs.universalenchants.mixin.accessor.Enchantment$EnchantmentDefinitionAccessor;
+import fuzs.universalenchants.mixin.accessor.EnchantmentAccessor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -25,19 +24,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.enchantment.*;
-import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ItemCompatHandler {
     public static final Set<EquipmentSlotGroup> ARMOR_EQUIPMENT_SLOT_GROUPS = Set.of(EquipmentSlotGroup.FEET,
@@ -45,36 +45,7 @@ public class ItemCompatHandler {
             EquipmentSlotGroup.CHEST,
             EquipmentSlotGroup.HEAD,
             EquipmentSlotGroup.ARMOR);
-    static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
-
-    public static void onFinalizeItemComponents(Item item, Consumer<Function<DataComponentMap, DataComponentPatch>> consumer) {
-        if (item instanceof ShearsItem || item instanceof ShieldItem) {
-            consumer.accept((DataComponentMap components) -> {
-                return DataComponentPatch.builder().set(DataComponents.ENCHANTABLE, new Enchantable(1)).build();
-            });
-        } else {
-            consumer.accept((DataComponentMap components) -> {
-                if (!components.has(DataComponents.ENCHANTABLE)) {
-                    Equippable equippable = components.get(DataComponents.EQUIPPABLE);
-                    if (equippable != null && equippable.slot() == EquipmentSlot.BODY) {
-                        ItemAttributeModifiers itemAttributeModifiers = components.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS,
-                                ItemAttributeModifiers.EMPTY);
-                        double defenseValue = itemAttributeModifiers.modifiers()
-                                .stream()
-                                .filter((ItemAttributeModifiers.Entry entry) -> entry.attribute().is(Attributes.ARMOR))
-                                .map(ItemAttributeModifiers.Entry::modifier)
-                                .mapToDouble(AttributeModifier::amount)
-                                .sum();
-                        return DataComponentPatch.builder()
-                                .set(DataComponents.ENCHANTABLE, new Enchantable(Math.max(1, Mth.ceil(defenseValue))))
-                                .build();
-                    }
-                }
-
-                return DataComponentPatch.EMPTY;
-            });
-        }
-    }
+    private static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
 
     public static void onTagsUpdated(HolderLookup.Provider registries, boolean isClientUpdate) {
         // use this event to modify registered enchantments directly, relevant fields are made mutable via access widener
@@ -90,7 +61,9 @@ public class ItemCompatHandler {
                                 ImmutableList.Builder<EquipmentSlotGroup> builder = ImmutableList.builder();
                                 builder.addAll(enchantmentDefinition.slots());
                                 builder.add(EquipmentSlotGroup.BODY);
-                                enchantmentDefinition.slots = builder.build();
+//                                enchantmentDefinition.slots = builder.build();
+                                Enchantment$EnchantmentDefinitionAccessor.class.cast(enchantmentDefinition)
+                                        .universalenchants$setSlots(builder.build());
                             }
                         }
                     }
@@ -105,17 +78,28 @@ public class ItemCompatHandler {
         Enchantment enchantment = holder.value();
         // Support one exclusive set per enchantment; in addition to the potentially existing exclusive set defined in the enchantment definition.
         TagKey<Enchantment> exclusiveSetTagKey = ModRegistry.getExclusiveSetEnchantmentTag(holder.key());
-        enchantment.exclusiveSet = enchantmentLookup.get(exclusiveSetTagKey)
+//        enchantment.exclusiveSet = enchantmentLookup.get(exclusiveSetTagKey)
+//                .<HolderSet<Enchantment>>map((HolderSet.Named<Enchantment> holderSet) -> {
+//                    return new OrHolderSet<>(List.of(enchantment.exclusiveSet(), holderSet));
+//                })
+//                .orElseGet(enchantment::exclusiveSet);
+        HolderSet<Enchantment> exclusiveSet = enchantmentLookup.get(exclusiveSetTagKey)
                 .<HolderSet<Enchantment>>map((HolderSet.Named<Enchantment> holderSet) -> {
                     return new OrHolderSet<>(List.of(enchantment.exclusiveSet(), holderSet));
                 })
-                .orElse(enchantment.exclusiveSet());
+                .orElseGet(enchantment::exclusiveSet);
+        EnchantmentAccessor.class.cast(enchantment).universalenchants$setExclusiveSet(exclusiveSet);
         // Support an inclusive set per enchantment for removing enchantments from the existing exclusive sets without overriding them.
         TagKey<Enchantment> inclusiveSetTagKey = ModRegistry.getInclusiveSetEnchantmentTag(holder.key());
-        enchantment.exclusiveSet = enchantmentLookup.get(inclusiveSetTagKey).<HolderSet<Enchantment>>map(holderSet -> {
+//        enchantment.exclusiveSet = enchantmentLookup.get(inclusiveSetTagKey).<HolderSet<Enchantment>>map(holderSet -> {
+//            return new AndHolderSet<>(List.of(enchantment.exclusiveSet(),
+//                    new NotHolderSet<>(enchantmentLookup, holderSet)));
+//        }).orElseGet(enchantment::exclusiveSet);
+        exclusiveSet = enchantmentLookup.get(inclusiveSetTagKey).<HolderSet<Enchantment>>map(holderSet -> {
             return new AndHolderSet<>(List.of(enchantment.exclusiveSet(),
                     new NotHolderSet<>(enchantmentLookup, holderSet)));
-        }).orElse(enchantment.exclusiveSet());
+        }).orElseGet(enchantment::exclusiveSet);
+        EnchantmentAccessor.class.cast(enchantment).universalenchants$setExclusiveSet(exclusiveSet);
     }
 
     private static void modifySupportedEnchantmentItems(HolderLookup.Provider registries, Holder.Reference<Enchantment> holder) {
@@ -124,17 +108,28 @@ public class ItemCompatHandler {
         // Allow one supported items tag per enchantment; in addition to the potentially existing supported items tag defined in the enchantment definition.
         TagKey<Item> secondaryEnchantableTagKey = ModRegistry.getSecondaryEnchantableItemTag(holder.key());
         itemLookup.get(secondaryEnchantableTagKey).ifPresent((HolderSet.Named<Item> holderSet) -> {
-            enchantmentDefinition.supportedItems = new OrHolderSet<>(List.of(enchantmentDefinition.supportedItems(),
+//            enchantmentDefinition.supportedItems = new OrHolderSet<>(List.of(enchantmentDefinition.supportedItems(),
+//                    holderSet));
+            HolderSet<Item> supportedItems = new OrHolderSet<>(List.of(enchantmentDefinition.supportedItems(),
                     holderSet));
+            Enchantment$EnchantmentDefinitionAccessor.class.cast(enchantmentDefinition)
+                    .universalenchants$setSupportedItems(supportedItems);
         });
         // Allow one primary items tag per enchantment; in addition to the potentially existing primary items tag defined in the enchantment definition.
         TagKey<Item> primaryEnchantableTagKey = ModRegistry.getPrimaryEnchantableItemTag(holder.key());
         itemLookup.get(primaryEnchantableTagKey).ifPresent((HolderSet.Named<Item> holderSet) -> {
-            enchantmentDefinition.primaryItems = enchantmentDefinition.primaryItems()
+//            enchantmentDefinition.primaryItems = enchantmentDefinition.primaryItems()
+//                    .<HolderSet<Item>>map((HolderSet<Item> primaryItems) -> {
+//                        return new OrHolderSet<>(List.of(primaryItems, holderSet));
+//                    })
+//                    .or(() -> Optional.of(holderSet));
+            Optional<HolderSet<Item>> optionalPrimaryItems = enchantmentDefinition.primaryItems()
                     .<HolderSet<Item>>map((HolderSet<Item> primaryItems) -> {
                         return new OrHolderSet<>(List.of(primaryItems, holderSet));
                     })
                     .or(() -> Optional.of(holderSet));
+            Enchantment$EnchantmentDefinitionAccessor.class.cast(enchantmentDefinition)
+                    .universalenchants$setPrimaryItems(optionalPrimaryItems);
         });
     }
 
