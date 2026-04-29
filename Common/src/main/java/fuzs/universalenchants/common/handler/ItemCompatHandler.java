@@ -48,20 +48,20 @@ public class ItemCompatHandler {
     private static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
 
     public static void onTagsUpdated(HolderLookup.Provider registries, boolean isClientUpdate) {
-        // use this event to modify registered enchantments directly, relevant fields are made mutable via access widener
+        // Use this event to modify registered enchantments directly via accessor mixins.
+        // Mutating record fields is not supported by NeoForge as source recompilation fails.
         registries.lookupOrThrow(Registries.ENCHANTMENT)
                 .listElements()
                 .forEach((Holder.Reference<Enchantment> holder) -> {
                     Enchantment.EnchantmentDefinition enchantmentDefinition = holder.value().definition();
-                    // allow all armor enchantments to also work for the body equipment slot
-                    // they need to separately support such items though
+                    // Allow all armor enchantments to also work for the body equipment slot.
+                    // Those need to separately support such items, though which must then be set in the enchantment definitions.
                     if (!enchantmentDefinition.slots().contains(EquipmentSlotGroup.BODY)) {
                         for (EquipmentSlotGroup slot : enchantmentDefinition.slots()) {
                             if (ARMOR_EQUIPMENT_SLOT_GROUPS.contains(slot)) {
                                 ImmutableList.Builder<EquipmentSlotGroup> builder = ImmutableList.builder();
                                 builder.addAll(enchantmentDefinition.slots());
                                 builder.add(EquipmentSlotGroup.BODY);
-//                                enchantmentDefinition.slots = builder.build();
                                 Enchantment$EnchantmentDefinitionAccessor.class.cast(enchantmentDefinition)
                                         .universalenchants$setSlots(builder.build());
                             }
@@ -78,11 +78,6 @@ public class ItemCompatHandler {
         Enchantment enchantment = holder.value();
         // Support one exclusive set per enchantment; in addition to the potentially existing exclusive set defined in the enchantment definition.
         TagKey<Enchantment> exclusiveSetTagKey = ModRegistry.getExclusiveSetEnchantmentTag(holder.key());
-//        enchantment.exclusiveSet = enchantmentLookup.get(exclusiveSetTagKey)
-//                .<HolderSet<Enchantment>>map((HolderSet.Named<Enchantment> holderSet) -> {
-//                    return new OrHolderSet<>(List.of(enchantment.exclusiveSet(), holderSet));
-//                })
-//                .orElseGet(enchantment::exclusiveSet);
         HolderSet<Enchantment> exclusiveSet = enchantmentLookup.get(exclusiveSetTagKey)
                 .<HolderSet<Enchantment>>map((HolderSet.Named<Enchantment> holderSet) -> {
                     return new OrHolderSet<>(List.of(enchantment.exclusiveSet(), holderSet));
@@ -91,10 +86,6 @@ public class ItemCompatHandler {
         EnchantmentAccessor.class.cast(enchantment).universalenchants$setExclusiveSet(exclusiveSet);
         // Support an inclusive set per enchantment for removing enchantments from the existing exclusive sets without overriding them.
         TagKey<Enchantment> inclusiveSetTagKey = ModRegistry.getInclusiveSetEnchantmentTag(holder.key());
-//        enchantment.exclusiveSet = enchantmentLookup.get(inclusiveSetTagKey).<HolderSet<Enchantment>>map(holderSet -> {
-//            return new AndHolderSet<>(List.of(enchantment.exclusiveSet(),
-//                    new NotHolderSet<>(enchantmentLookup, holderSet)));
-//        }).orElseGet(enchantment::exclusiveSet);
         exclusiveSet = enchantmentLookup.get(inclusiveSetTagKey).<HolderSet<Enchantment>>map(holderSet -> {
             return new AndHolderSet<>(List.of(enchantment.exclusiveSet(),
                     new NotHolderSet<>(enchantmentLookup, holderSet)));
@@ -108,8 +99,6 @@ public class ItemCompatHandler {
         // Allow one supported items tag per enchantment; in addition to the potentially existing supported items tag defined in the enchantment definition.
         TagKey<Item> secondaryEnchantableTagKey = ModRegistry.getSecondaryEnchantableItemTag(holder.key());
         itemLookup.get(secondaryEnchantableTagKey).ifPresent((HolderSet.Named<Item> holderSet) -> {
-//            enchantmentDefinition.supportedItems = new OrHolderSet<>(List.of(enchantmentDefinition.supportedItems(),
-//                    holderSet));
             HolderSet<Item> supportedItems = new OrHolderSet<>(List.of(enchantmentDefinition.supportedItems(),
                     holderSet));
             Enchantment$EnchantmentDefinitionAccessor.class.cast(enchantmentDefinition)
@@ -118,11 +107,6 @@ public class ItemCompatHandler {
         // Allow one primary items tag per enchantment; in addition to the potentially existing primary items tag defined in the enchantment definition.
         TagKey<Item> primaryEnchantableTagKey = ModRegistry.getPrimaryEnchantableItemTag(holder.key());
         itemLookup.get(primaryEnchantableTagKey).ifPresent((HolderSet.Named<Item> holderSet) -> {
-//            enchantmentDefinition.primaryItems = enchantmentDefinition.primaryItems()
-//                    .<HolderSet<Item>>map((HolderSet<Item> primaryItems) -> {
-//                        return new OrHolderSet<>(List.of(primaryItems, holderSet));
-//                    })
-//                    .or(() -> Optional.of(holderSet));
             Optional<HolderSet<Item>> optionalPrimaryItems = enchantmentDefinition.primaryItems()
                     .<HolderSet<Item>>map((HolderSet<Item> primaryItems) -> {
                         return new OrHolderSet<>(List.of(primaryItems, holderSet));
@@ -136,7 +120,7 @@ public class ItemCompatHandler {
     public static EventResult onShieldBlock(LivingEntity blockingEntity, DamageSource damageSource, MutableFloat blockedDamage) {
         if (blockingEntity.level() instanceof ServerLevel serverLevel) {
             if (damageSource.isDirect() && damageSource.getEntity() instanceof LivingEntity attackingEntity) {
-                // fix for mods hooking into post-attack effects and triggering this event (namely Apotheosis)
+                // Workaround for mods hooking into post-attack effects and triggering this event (namely Apotheosis).
                 if (IS_BLOCKING_WITH_SHIELD.get() == null) {
                     IS_BLOCKING_WITH_SHIELD.set(Unit.INSTANCE);
                     doPostAttackEffectsWithItemSource(serverLevel,
@@ -149,10 +133,10 @@ public class ItemCompatHandler {
                             attackingEntity,
                             damageSource,
                             attackKnockback);
-                    // also fixes a vanilla bug where shields do not deal knockback in LivingEntity::blockedByShield,
-                    // since the knockback method is called on the blocking entity and not the attacking entity
-                    // if that should not happen, so knockback only applies when the actual knockback enchantment is present
-                    // include a check here if the knockback is different from the original attribute value
+                    // This implementation also fixes a vanilla bug where shields do not deal knockback in LivingEntity::blockedByShield,
+                    // since the knockback method is called on the blocking entity and not the attacking entity.
+                    // If that should not happen, so knockback only applies when the actual knockback enchantment is present,
+                    // include a check here if the knockback is different from the original attribute value.
                     attackingEntity.knockback(0.5 * attackKnockback,
                             blockingEntity.getX() - attackingEntity.getX(),
                             blockingEntity.getZ() - attackingEntity.getZ());
@@ -197,8 +181,8 @@ public class ItemCompatHandler {
         Item item = itemStack.getItem();
         int itemUseDuration = itemStack.getUseDuration(livingEntity) - remainingUseDuration.getAsInt();
         if (item instanceof BowItem && itemUseDuration < 20 || item instanceof TridentItem && itemUseDuration < 10) {
-            // quick charge enchantment for bows and tridents
-            // the values are the same as for crossbows, but speed improvement is not relative to actual item use duration now
+            // Support quick charge enchantment for bows and tridents.
+            // The values are the same as for crossbows, but speed improvement is not relative to actual item use duration now.
             float chargingTime = EnchantmentHelper.modifyCrossbowChargingTime(itemStack, livingEntity, 1.25F);
             remainingUseDuration.mapAsInt(duration -> duration - Mth.floor((1.25F - chargingTime) / 0.25F));
         }
