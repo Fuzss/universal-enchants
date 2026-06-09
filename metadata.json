@@ -4,7 +4,7 @@
         "id": "universalenchants",
         "group": "fuzs.universalenchants",
         "name": "Universal Enchants",
-        "version": "26.1.0",
+        "version": "26.1.1",
         "authors": [
             "Fuzs"
         ],
@@ -52,7 +52,7 @@
         }
     ],
     "environments": {
-        "client": "unsupported",
+        "client": "optional",
         "server": "required"
     },
     "platforms": [

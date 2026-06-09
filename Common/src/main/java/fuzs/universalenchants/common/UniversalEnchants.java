@@ -9,7 +9,7 @@ import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.common.api.event.v1.core.EventPhase;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.*;
 import fuzs.puzzleslib.common.api.event.v1.level.BlockEvents;
-import fuzs.puzzleslib.common.api.event.v1.server.TagsUpdatedCallback;
+import fuzs.puzzleslib.common.api.event.v1.server.ServerResourcesLoadCallback;
 import fuzs.universalenchants.common.config.ServerConfig;
 import fuzs.universalenchants.common.handler.BetterEnchantsHandler;
 import fuzs.universalenchants.common.handler.ItemCompatHandler;
@@ -21,7 +21,6 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -41,11 +40,16 @@ public class UniversalEnchants implements ModConstructor {
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
     public static final ConfigHolder CONFIG = ConfigHolder.builder(MOD_ID).server(ServerConfig.class);
-    public static final Identifier COMPATIBLE_BOW_ENCHANTMENTS_LOCATION = id("compatible_bow_enchantments");
-    public static final Identifier COMPATIBLE_CROSSBOW_ENCHANTMENTS_LOCATION = id("compatible_crossbow_enchantments");
-    public static final Identifier COMPATIBLE_MACE_ENCHANTMENTS_LOCATION = id("compatible_mace_enchantments");
-    public static final Identifier COMPATIBLE_DAMAGE_ENCHANTMENTS_LOCATION = id("compatible_damage_enchantments");
-    public static final Identifier COMPATIBLE_PROTECTION_ENCHANTMENTS_LOCATION = id("compatible_protection_enchantments");
+    public static final Identifier ADDITIONAL_DAMAGE_ENCHANTMENTS_ID = id("additional_damage_enchantments");
+    public static final Identifier ADDITIONAL_WEAPON_ENCHANTMENTS_ID = id("additional_weapon_enchantments");
+    public static final Identifier ADDITIONAL_RANGED_ENCHANTMENTS_ID = id("additional_ranged_enchantments");
+    public static final Identifier ADDITIONAL_SHIELD_ENCHANTMENTS_ID = id("additional_shield_enchantments");
+    public static final Identifier ADDITIONAL_ANIMAL_ENCHANTMENTS_ID = id("additional_animal_enchantments");
+    public static final Identifier COMPATIBLE_BOW_ENCHANTMENTS_ID = id("compatible_bow_enchantments");
+    public static final Identifier COMPATIBLE_CROSSBOW_ENCHANTMENTS_ID = id("compatible_crossbow_enchantments");
+    public static final Identifier COMPATIBLE_MACE_ENCHANTMENTS_ID = id("compatible_mace_enchantments");
+    public static final Identifier COMPATIBLE_DAMAGE_ENCHANTMENTS_ID = id("compatible_damage_enchantments");
+    public static final Identifier COMPATIBLE_PROTECTION_ENCHANTMENTS_ID = id("compatible_protection_enchantments");
 
     @Override
     public void onConstructMod() {
@@ -54,7 +58,7 @@ public class UniversalEnchants implements ModConstructor {
     }
 
     private static void registerEventHandlers() {
-        TagsUpdatedCallback.EVENT.register(ItemCompatHandler::onTagsUpdated);
+        ServerResourcesLoadCallback.EVENT.register(ItemCompatHandler::onServerResourcesLoad);
         UseItemEvents.TICK.register(ItemCompatHandler::onUseItemTick);
         LivingHurtCallback.EVENT.register(BetterEnchantsHandler::onLivingHurt);
         PickProjectileCallback.EVENT.register(BetterEnchantsHandler::onPickProjectile);
@@ -72,19 +76,34 @@ public class UniversalEnchants implements ModConstructor {
 
     @Override
     public void onAddDataPackFinders(PackRepositorySourcesContext context) {
-        context.registerBuiltInPack(COMPATIBLE_BOW_ENCHANTMENTS_LOCATION,
+        context.registerBuiltInPack(ADDITIONAL_DAMAGE_ENCHANTMENTS_ID,
+                Component.literal("Additional Damage Enchantments"),
+                true);
+        context.registerBuiltInPack(ADDITIONAL_WEAPON_ENCHANTMENTS_ID,
+                Component.literal("Additional Weapon Enchantments"),
+                true);
+        context.registerBuiltInPack(ADDITIONAL_RANGED_ENCHANTMENTS_ID,
+                Component.literal("Additional Ranged Enchantments"),
+                true);
+        context.registerBuiltInPack(ADDITIONAL_SHIELD_ENCHANTMENTS_ID,
+                Component.literal("Additional Shield Enchantments"),
+                true);
+        context.registerBuiltInPack(ADDITIONAL_ANIMAL_ENCHANTMENTS_ID,
+                Component.literal("Additional Animal Enchantments"),
+                true);
+        context.registerBuiltInPack(COMPATIBLE_BOW_ENCHANTMENTS_ID,
                 Component.literal("Compatible Bow Enchantments"),
                 true);
-        context.registerBuiltInPack(COMPATIBLE_CROSSBOW_ENCHANTMENTS_LOCATION,
+        context.registerBuiltInPack(COMPATIBLE_CROSSBOW_ENCHANTMENTS_ID,
                 Component.literal("Compatible Crossbow Enchantments"),
                 true);
-        context.registerBuiltInPack(COMPATIBLE_MACE_ENCHANTMENTS_LOCATION,
+        context.registerBuiltInPack(COMPATIBLE_MACE_ENCHANTMENTS_ID,
                 Component.literal("Compatible Mace Enchantments"),
                 true);
-        context.registerBuiltInPack(COMPATIBLE_DAMAGE_ENCHANTMENTS_LOCATION,
+        context.registerBuiltInPack(COMPATIBLE_DAMAGE_ENCHANTMENTS_ID,
                 Component.literal("Compatible Damage Enchantments"),
                 false);
-        context.registerBuiltInPack(COMPATIBLE_PROTECTION_ENCHANTMENTS_LOCATION,
+        context.registerBuiltInPack(COMPATIBLE_PROTECTION_ENCHANTMENTS_ID,
                 Component.literal("Compatible Protection Enchantments"),
                 false);
     }
@@ -94,11 +113,11 @@ public class UniversalEnchants implements ModConstructor {
         context.registerItemComponentsPatch((Item item) -> {
                     return item instanceof ShearsItem || item instanceof ShieldItem;
                 },
-                (DataComponentGetter components, DataComponentMap.Builder builder, HolderLookup.Provider lookup, ResourceKey<Item> key) -> {
+                (DataComponentGetter components, DataComponentMap.Builder builder, HolderLookup.Provider lookup, Item item) -> {
                     builder.set(DataComponents.ENCHANTABLE, new Enchantable(1)).build();
                 });
         context.registerItemComponentsPatch(Predicates.alwaysTrue(),
-                (DataComponentGetter components, DataComponentMap.Builder builder, HolderLookup.Provider lookup, ResourceKey<Item> key) -> {
+                (DataComponentGetter components, DataComponentMap.Builder builder, HolderLookup.Provider lookup, Item item) -> {
                     if (components.get(DataComponents.ENCHANTABLE) == null) {
                         Equippable equippable = components.get(DataComponents.EQUIPPABLE);
                         if (equippable != null && equippable.slot() == EquipmentSlot.BODY) {

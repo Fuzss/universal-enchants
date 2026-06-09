@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "Resources for Universal Enchants",
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
+  }
+}

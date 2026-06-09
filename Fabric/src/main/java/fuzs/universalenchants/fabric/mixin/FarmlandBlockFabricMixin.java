@@ -22,14 +22,14 @@ abstract class FarmlandBlockFabricMixin extends Block {
     }
 
     @Inject(method = "fallOn", at = @At("HEAD"), cancellable = true)
-    public void fallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, double fallDistance, CallbackInfo callback) {
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance, CallbackInfo callback) {
         if (level instanceof ServerLevel serverLevel) {
             if (BetterEnchantsHandler.onFarmlandTrample(serverLevel,
-                    blockPos,
+                    pos,
                     Blocks.DIRT.defaultBlockState(),
                     fallDistance,
                     entity).isInterrupt()) {
-                super.fallOn(level, blockState, blockPos, entity, fallDistance);
+                super.fallOn(level, state, pos, entity, fallDistance);
                 callback.cancel();
             }
         }

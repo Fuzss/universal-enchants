@@ -1,11 +1,12 @@
 {
   "values": [
+    "#minecraft:axes",
     {
-      "id": "#c:tools/bow",
+      "id": "#c:tools/mace",
       "required": false
     },
     {
-      "id": "#c:tools/spear",
+      "id": "#c:tools/trident",
       "required": false
     }
   ]

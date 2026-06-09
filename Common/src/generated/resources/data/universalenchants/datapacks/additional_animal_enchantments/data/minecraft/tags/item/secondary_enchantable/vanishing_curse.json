@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "#c:armors/horse",
+      "required": false
+    },
+    {
+      "id": "#c:armors/nautilus",
+      "required": false
+    },
+    {
+      "id": "#c:armors/wolf",
+      "required": false
+    }
+  ]
+}

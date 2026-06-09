@@ -13,7 +13,9 @@ import fuzs.universalenchants.common.mixin.accessor.EnchantmentAccessor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -47,7 +49,11 @@ public class ItemCompatHandler {
             EquipmentSlotGroup.ARMOR);
     private static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
 
-    public static void onTagsUpdated(HolderLookup.Provider registries, boolean isClientUpdate) {
+    public static void onServerResourcesLoad(ReloadableServerResources serverResources, RegistryAccess registries) {
+        onTagsUpdated(registries);
+    }
+
+    public static void onTagsUpdated(RegistryAccess registries) {
         // Use this event to modify registered enchantments directly via accessor mixins.
         // Mutating record fields is not supported by NeoForge as source recompilation fails.
         registries.lookupOrThrow(Registries.ENCHANTMENT)
