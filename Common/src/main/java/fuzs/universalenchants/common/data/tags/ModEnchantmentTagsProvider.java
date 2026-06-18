@@ -23,8 +23,8 @@ public abstract class ModEnchantmentTagsProvider extends AbstractTagProvider<Enc
     }
 
     protected final void addExclusiveEnchantments(ResourceKey<Enchantment> primaryEnchantment, ResourceKey<Enchantment> secondaryEnchantment) {
-        this.tag(ModRegistry.getExclusiveSetEnchantmentTag(primaryEnchantment)).addKey(secondaryEnchantment);
-        this.tag(ModRegistry.getExclusiveSetEnchantmentTag(secondaryEnchantment)).addKey(primaryEnchantment);
+        this.tag(ModRegistry.getExclusiveSetEnchantmentTag(primaryEnchantment)).add(secondaryEnchantment);
+        this.tag(ModRegistry.getExclusiveSetEnchantmentTag(secondaryEnchantment)).add(primaryEnchantment);
     }
 
     @SafeVarargs
@@ -35,8 +35,8 @@ public abstract class ModEnchantmentTagsProvider extends AbstractTagProvider<Enc
     }
 
     protected final void addInclusiveEnchantments(ResourceKey<Enchantment> primaryEnchantment, ResourceKey<Enchantment> secondaryEnchantment) {
-        this.tag(ModRegistry.getInclusiveSetEnchantmentTag(primaryEnchantment)).addKey(secondaryEnchantment);
-        this.tag(ModRegistry.getInclusiveSetEnchantmentTag(secondaryEnchantment)).addKey(primaryEnchantment);
+        this.tag(ModRegistry.getInclusiveSetEnchantmentTag(primaryEnchantment)).add(secondaryEnchantment);
+        this.tag(ModRegistry.getInclusiveSetEnchantmentTag(secondaryEnchantment)).add(primaryEnchantment);
     }
 
     public static class Impl extends ModEnchantmentTagsProvider {

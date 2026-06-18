@@ -1,4 +1,4 @@
-// 26.1.2	2026-06-09T18:48:12.695484	universalenchants:additional_weapon_enchantments/Tags for minecraft:item mod id vanilla
+// 26.2	2026-06-18T18:19:48.955617	universalenchants:additional_weapon_enchantments/Tags for minecraft:item mod id vanilla
 84f86c2488734798b954adf1286004e80e230f8c data/universalenchants/datapacks/additional_weapon_enchantments/data/minecraft/tags/item/secondary_enchantable/channeling.json
 ba9125aa546790a0582445879c658b228dbb763c data/universalenchants/datapacks/additional_weapon_enchantments/data/minecraft/tags/item/secondary_enchantable/fire_aspect.json
 b392494a582c439e1b53aa3e53b6981f826b4fa0 data/universalenchants/datapacks/additional_weapon_enchantments/data/minecraft/tags/item/secondary_enchantable/knockback.json

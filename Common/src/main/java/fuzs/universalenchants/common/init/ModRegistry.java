@@ -3,7 +3,11 @@ package fuzs.universalenchants.common.init;
 import fuzs.puzzleslib.common.api.data.v2.AbstractDatapackRegistriesProvider;
 import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalenchants.common.UniversalEnchants;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityFlagsPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.MovementPredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
@@ -15,6 +19,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.*;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -120,7 +125,7 @@ public class ModRegistry {
                         .withEffect(EnchantmentEffectComponents.POST_ATTACK,
                                 EnchantmentTarget.ATTACKER,
                                 EnchantmentTarget.VICTIM,
-                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityType.LIGHTNING_BOLT.builtInRegistryHolder()),
+                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityTypes.LIGHTNING_BOLT.builtInRegistryHolder()),
                                                 false),
                                         new PlaySoundEffect(List.of(SoundEvents.TRIDENT_THUNDER),
                                                 ConstantFloat.of(5.0F),
@@ -131,7 +136,7 @@ public class ModRegistry {
                                                         .located(LocationPredicate.Builder.location()
                                                                 .setCanSeeSky(true))),
                                         AnyOfCondition.anyOf(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER,
-                                                        EntityPredicate.Builder.entity().of(entityLookup, EntityType.TRIDENT)),
+                                                        EntityPredicate.Builder.entity().of(entityLookup, EntityTypes.TRIDENT)),
                                                 LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER,
                                                         EntityPredicate.Builder.entity()
                                                                 .equipment(EntityEquipmentPredicate.Builder.equipment()
@@ -142,17 +147,17 @@ public class ModRegistry {
                                                                 .moving(MovementPredicate.fallDistance(MinMaxBounds.Doubles.atLeast(
                                                                         1.5)))))))
                         .withEffect(EnchantmentEffectComponents.HIT_BLOCK,
-                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityType.LIGHTNING_BOLT.builtInRegistryHolder()),
+                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityTypes.LIGHTNING_BOLT.builtInRegistryHolder()),
                                                 false),
                                         new PlaySoundEffect(List.of(SoundEvents.TRIDENT_THUNDER),
                                                 ConstantFloat.of(5.0F),
                                                 ConstantFloat.of(1.0F))),
                                 AllOfCondition.allOf(WeatherCheck.weather().setThundering(true),
                                         LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
-                                                EntityPredicate.Builder.entity().of(entityLookup, EntityType.TRIDENT)),
+                                                EntityPredicate.Builder.entity().of(entityLookup, EntityTypes.TRIDENT)),
                                         LocationCheck.checkLocation(LocationPredicate.Builder.location()
                                                 .setCanSeeSky(true)
-                                                .setBlock(net.minecraft.advancements.criterion.BlockPredicate.Builder.block()
+                                                .setBlock(net.minecraft.advancements.predicates.BlockPredicate.Builder.block()
                                                         .of(blockLookup, BlockTags.LIGHTNING_RODS))))));
     }
 }

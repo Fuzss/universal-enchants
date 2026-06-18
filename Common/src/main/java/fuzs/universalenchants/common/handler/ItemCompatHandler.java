@@ -145,7 +145,9 @@ public class ItemCompatHandler {
                     // include a check here if the knockback is different from the original attribute value.
                     attackingEntity.knockback(0.5 * attackKnockback,
                             blockingEntity.getX() - attackingEntity.getX(),
-                            blockingEntity.getZ() - attackingEntity.getZ());
+                            blockingEntity.getZ() - attackingEntity.getZ(),
+                            damageSource,
+                            blockedDamage.getAsFloat());
                     IS_BLOCKING_WITH_SHIELD.remove();
                 }
             }

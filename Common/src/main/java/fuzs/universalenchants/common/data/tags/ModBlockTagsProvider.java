@@ -5,8 +5,9 @@ import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
 import fuzs.universalenchants.common.init.ModRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 public class ModBlockTagsProvider extends AbstractTagProvider<Block> {
 
@@ -17,11 +18,11 @@ public class ModBlockTagsProvider extends AbstractTagProvider<Block> {
     @Override
     public void addTags(HolderLookup.Provider registries) {
         this.tag(ModRegistry.FROSTED_ICE_REPLACEABLES_BLOCK_TAG)
-                .add(Blocks.WATER,
-                        Blocks.BUBBLE_COLUMN,
-                        Blocks.KELP,
-                        Blocks.KELP_PLANT,
-                        Blocks.SEAGRASS,
-                        Blocks.TALL_SEAGRASS);
+                .add(BlockIds.WATER,
+                        BlockIds.BUBBLE_COLUMN,
+                        BlockItemIds.KELP.block(),
+                        BlockIds.KELP_PLANT,
+                        BlockItemIds.SEAGRASS.block(),
+                        BlockIds.TALL_SEAGRASS);
     }
 }
