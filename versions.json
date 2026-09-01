@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "593958",
-    "distributions.curseforge.slug": "universal-enchants",
-    "distributions.github.slug": "universal-enchants",
-    "distributions.modrinth.id": "DT56YDir",
-    "distributions.modrinth.slug": "universal-enchants"
+  "distributions": {
+    "curseforge": {
+      "id": "593958",
+      "slug": "universal-enchants"
+    },
+    "github": {
+      "slug": "universal-enchants"
+    },
+    "modrinth": {
+      "id": "DT56YDir",
+      "slug": "universal-enchants"
+    }
   }
 }
