@@ -52,12 +52,6 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
 
         @Override
         public void addTags(HolderLookup.Provider provider) {
-            this.tag(ModRegistry.ANIMAL_ARMOR_ITEM_TAG)
-                    .add(Items.LEATHER_HORSE_ARMOR,
-                            Items.IRON_HORSE_ARMOR,
-                            Items.GOLDEN_HORSE_ARMOR,
-                            Items.DIAMOND_HORSE_ARMOR,
-                            Items.WOLF_ARMOR);
             this.addSupportedItems("c:armors", Enchantments.THORNS);
         }
     }
@@ -164,6 +158,12 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
 
         @Override
         public void addTags(HolderLookup.Provider provider) {
+            this.tag(ModRegistry.ANIMAL_ARMOR_ITEM_TAG)
+                    .add(Items.LEATHER_HORSE_ARMOR,
+                            Items.IRON_HORSE_ARMOR,
+                            Items.GOLDEN_HORSE_ARMOR,
+                            Items.DIAMOND_HORSE_ARMOR,
+                            Items.WOLF_ARMOR);
             this.addSupportedItemsForLand(ModRegistry.ANIMAL_ARMOR_ITEM_TAG);
         }
 
