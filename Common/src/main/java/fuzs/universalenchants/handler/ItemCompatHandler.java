@@ -35,12 +35,12 @@ import java.util.Optional;
 import java.util.Set;
 
 public class ItemCompatHandler {
-    private static final Set<EquipmentSlotGroup> ARMOR_EQUIPMENT_SLOT_GROUPS = Set.of(EquipmentSlotGroup.FEET,
+    public static final Set<EquipmentSlotGroup> ARMOR_EQUIPMENT_SLOT_GROUPS = Set.of(EquipmentSlotGroup.FEET,
             EquipmentSlotGroup.LEGS,
             EquipmentSlotGroup.CHEST,
             EquipmentSlotGroup.HEAD,
             EquipmentSlotGroup.ARMOR);
-    static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
+    private static final ThreadLocal<Unit> IS_BLOCKING_WITH_SHIELD = new ThreadLocal<>();
 
     public static void onTagsUpdated(HolderLookup.Provider registries, boolean isClientUpdate) {
         // use this event to modify registered enchantments directly, relevant fields are made mutable via access widener
