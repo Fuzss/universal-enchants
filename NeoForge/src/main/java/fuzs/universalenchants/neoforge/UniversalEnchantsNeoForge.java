@@ -4,10 +4,6 @@ import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.event.v1.data.MutableValue;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import fuzs.universalenchants.UniversalEnchants;
-import fuzs.universalenchants.data.ModBlockTagProvider;
-import fuzs.universalenchants.data.ModEnchantmentTagProvider;
-import fuzs.universalenchants.data.ModItemTagProvider;
-import fuzs.universalenchants.data.ModRegistriesDatapackProvider;
 import fuzs.universalenchants.data.tags.ModBlockTagsProvider;
 import fuzs.universalenchants.data.tags.ModEnchantmentTagsProvider;
 import fuzs.universalenchants.data.tags.ModItemTagsProvider;
@@ -27,11 +23,7 @@ public class UniversalEnchantsNeoForge {
         ModConstructor.construct(UniversalEnchants.MOD_ID, UniversalEnchants::new);
         registerEventHandlers(NeoForge.EVENT_BUS);
         DataProviderHelper.registerDataProviders(UniversalEnchants.MOD_ID,
-                ModBlockTagProvider::new,
-                ModEnchantmentTagProvider::new,
-                ModRegistriesDatapackProvider::new);
-        DataProviderHelper.registerDataProviders(UniversalEnchants.MOD_ID,
-                ModRegistry.REGISTRY_SET_BUILDER,
+                ModRegistry.REGISTRY_SET,
                 ModItemTagsProvider.Impl::new,
                 ModEnchantmentTagsProvider.Impl::new,
                 ModBlockTagsProvider::new);

@@ -40,9 +40,13 @@ public class ModRegistriesDatapackProvider extends AbstractRegistriesDatapackGen
 
     @Override
     public void addBootstrap(BootstrapContext<Enchantment> context) {
+        boostrapEnchantments(context);
+    }
+
+    public static void boostrapEnchantments(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
         HolderGetter<Enchantment> enchantmentLookup = context.lookup(Registries.ENCHANTMENT);
-        // allow frost walker to replace sea vegetation and itself, also remove on ground check to enable jump-sprinting across water
+        // Allow frost walker to replace sea vegetation and itself, also remove on ground check to enable jump-sprinting across water.
         ReplaceDisk replaceDisk = new ReplaceDisk(new LevelBasedValue.Clamped(LevelBasedValue.perLevel(3.0F, 1.0F),
                 0.0F,
                 16.0F),
@@ -72,9 +76,9 @@ public class ModRegistriesDatapackProvider extends AbstractRegistriesDatapackGen
                                         .tag(TagPredicate.isNot(DamageTypeTags.BYPASSES_INVULNERABILITY))))
                         .withEffect(EnchantmentEffectComponents.LOCATION_CHANGED, replaceDisk)
                         .withEffect(EnchantmentEffectComponents.TICK, replaceDisk,
-                                // has a chance of about 90% to tick at least once every second which should be enough
+                                // has a chance of about 90% to tick at least once every second, which should be enough
                                 LootItemRandomChanceCondition.randomChance(0.1F)));
-        // remove arrow entity type check, so this also work for tridents
+        // Remove the arrow entity type check, so this also works for tridents.
         registerEnchantment(context,
                 Enchantments.POWER,
                 Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(ItemTags.BOW_ENCHANTABLE),
