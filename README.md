@@ -111,7 +111,7 @@ Allows armor enchantments to be applied to additional animal armor.
   `minecraft:blast_protection`, `minecraft:projectile_protection`, `minecraft:thorns`, `minecraft:binding_curse`,
   `minecraft:vanishing_curse`
 
-### Compatible Enchantments (for Minecraft 1.21.1 & 1.21.10+)
+#### Compatible Enchantments (for Minecraft 1.21.1 & 1.21.10+)
 
 This section covers several optional data packs that relax common vanilla compatibility restrictions. Each pack focuses
 on a specific item or enchantment group.
