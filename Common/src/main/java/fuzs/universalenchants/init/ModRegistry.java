@@ -13,6 +13,7 @@ public class ModRegistry {
     static final TagFactory TAGS = TagFactory.make(UniversalEnchants.MOD_ID);
     public static final TagKey<Block> FROSTED_ICE_REPLACEABLES_BLOCK_TAG = TAGS.registerBlockTag(
             "frosted_ice_replaceables");
+    public static final TagKey<Item> ANIMAL_ARMOR_ITEM_TAG = TAGS.registerItemTag("animal_armor");
 
     public static void bootstrap() {
         // NO-OP

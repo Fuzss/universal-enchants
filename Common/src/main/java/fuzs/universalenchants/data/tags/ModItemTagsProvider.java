@@ -1,8 +1,8 @@
 package fuzs.universalenchants.data.tags;
 
 import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
-import fuzs.puzzleslib.api.data.v3.tags.AbstractTagAppender;
 import fuzs.puzzleslib.api.data.v2.tags.AbstractTagProvider;
+import fuzs.puzzleslib.api.data.v3.tags.AbstractTagAppender;
 import fuzs.universalenchants.init.ModRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
@@ -51,6 +52,12 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
 
         @Override
         public void addTags(HolderLookup.Provider provider) {
+            this.tag(ModRegistry.ANIMAL_ARMOR_ITEM_TAG)
+                    .add(Items.LEATHER_HORSE_ARMOR,
+                            Items.IRON_HORSE_ARMOR,
+                            Items.GOLDEN_HORSE_ARMOR,
+                            Items.DIAMOND_HORSE_ARMOR,
+                            Items.WOLF_ARMOR);
             this.addSupportedItems("c:armors", Enchantments.THORNS);
         }
     }
@@ -72,7 +79,7 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
                     Enchantments.BANE_OF_ARTHROPODS,
                     Enchantments.IMPALING,
                     Enchantments.BREACH);
-            this.addSupportedItems("c:tools/trident",
+            this.addSupportedItems("c:tools/spear",
                     Enchantments.SHARPNESS,
                     Enchantments.SMITE,
                     Enchantments.BANE_OF_ARTHROPODS,
@@ -82,7 +89,6 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
                     Enchantments.SMITE,
                     Enchantments.BANE_OF_ARTHROPODS,
                     Enchantments.IMPALING);
-            this.addSupportedItems(ItemTags.SPEARS, Enchantments.IMPALING, Enchantments.BREACH);
         }
     }
 
@@ -102,7 +108,7 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
                     Enchantments.FIRE_ASPECT);
             // Do not add Fire Aspect, it does not fit well with the aquatic theme of tridents.
             // Some crossbow enchantments are supported by thrown tridents.
-            this.addSupportedItems("c:tools/trident",
+            this.addSupportedItems("c:tools/spear",
                     Enchantments.LOOTING,
                     Enchantments.KNOCKBACK,
                     Enchantments.QUICK_CHARGE,
@@ -158,12 +164,10 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
 
         @Override
         public void addTags(HolderLookup.Provider provider) {
-            this.addSupportedItemsForLand("c:armors/horse");
-            this.addSupportedItemsForLand("c:armors/wolf");
-            this.addSupportedItemsForWater("c:armors/nautilus");
+            this.addSupportedItemsForLand(ModRegistry.ANIMAL_ARMOR_ITEM_TAG);
         }
 
-        private void addSupportedItemsForLand(String tagKey) {
+        private void addSupportedItemsForLand(TagKey<Item> tagKey) {
             this.addSupportedItems(tagKey,
                     Enchantments.PROTECTION,
                     Enchantments.FIRE_PROTECTION,
@@ -176,18 +180,6 @@ public abstract class ModItemTagsProvider extends AbstractTagProvider<Item> {
                     Enchantments.FROST_WALKER,
                     Enchantments.BINDING_CURSE,
                     Enchantments.SOUL_SPEED,
-                    Enchantments.VANISHING_CURSE);
-        }
-
-        private void addSupportedItemsForWater(String tagKey) {
-            this.addSupportedItems(tagKey,
-                    Enchantments.PROTECTION,
-                    Enchantments.FIRE_PROTECTION,
-                    Enchantments.FEATHER_FALLING,
-                    Enchantments.BLAST_PROTECTION,
-                    Enchantments.PROJECTILE_PROTECTION,
-                    Enchantments.THORNS,
-                    Enchantments.BINDING_CURSE,
                     Enchantments.VANISHING_CURSE);
         }
     }
