@@ -1,7 +1,8 @@
 {
   "values": [
+    "#minecraft:axes",
     {
-      "id": "#c:armors",
+      "id": "#c:tools/spear",
       "required": false
     }
   ]
