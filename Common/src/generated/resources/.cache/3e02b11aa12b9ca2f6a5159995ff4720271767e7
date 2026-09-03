@@ -1,0 +1,6 @@
+// 1.21.1	2026-09-03T14:43:30.915665	universalenchants:additional_damage_enchantments/Tags for minecraft:item mod id vanilla
+612b5fbe4bb5565bc836a36a198888bba286abb0 data/universalenchants/datapacks/additional_damage_enchantments/data/minecraft/tags/item/secondary_enchantable/bane_of_arthropods.json
+486973f1c056ce25c3040e1d4fabc17d44a86738 data/universalenchants/datapacks/additional_damage_enchantments/data/minecraft/tags/item/secondary_enchantable/breach.json
+ab322ccdb415433675ce6c80551c4f91b0697aff data/universalenchants/datapacks/additional_damage_enchantments/data/minecraft/tags/item/secondary_enchantable/impaling.json
+612b5fbe4bb5565bc836a36a198888bba286abb0 data/universalenchants/datapacks/additional_damage_enchantments/data/minecraft/tags/item/secondary_enchantable/sharpness.json
+612b5fbe4bb5565bc836a36a198888bba286abb0 data/universalenchants/datapacks/additional_damage_enchantments/data/minecraft/tags/item/secondary_enchantable/smite.json
