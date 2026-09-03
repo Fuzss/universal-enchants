@@ -1,6 +1,6 @@
 {
   "branches": {
-    "1.20.1": "fixes",
+    "1.20.1": "archived",
     "1.21.1": "maintained",
     "1.21.11": "archived",
     "26.1.x": "maintained",
