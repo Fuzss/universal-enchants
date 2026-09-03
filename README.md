@@ -118,35 +118,45 @@ on a specific item or enchantment group.
 
 #### `universalenchants:compatible_bow_enchantments` (default: `true`)
 
-- `minecraft:mending`: `minecraft:infinity`
-- `minecraft:infinity`: `minecraft:mending`
+Allows normally incompatible bow enchantments to be used together.
+
+* `minecraft:mending`: `minecraft:infinity`
+* `minecraft:infinity`: `minecraft:mending`
 
 #### `universalenchants:compatible_crossbow_enchantments` (default: `true`)
 
-- `minecraft:multishot`: `minecraft:piercing`
-- `minecraft:piercing`: `minecraft:multishot`
+Allows normally incompatible crossbow enchantments to be used together.
+
+* `minecraft:multishot`: `minecraft:piercing`
+* `minecraft:piercing`: `minecraft:multishot`
 
 #### `universalenchants:compatible_mace_enchantments` (default: `true`)
 
-- `minecraft:density`: `minecraft:sharpness`, `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`,
+Allows the mace's damage enchantments to be combined with `minecraft:density`.
+
+* `minecraft:density`: `minecraft:sharpness`, `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`,
   `minecraft:breach`
-- `minecraft:sharpness`: `minecraft:density`
-- `minecraft:smite`: `minecraft:density`
-- `minecraft:bane_of_arthropods`: `minecraft:density`
-- `minecraft:impaling`: `minecraft:density`
-- `minecraft:breach`: `minecraft:density`
+* `minecraft:sharpness`: `minecraft:density`
+* `minecraft:smite`: `minecraft:density`
+* `minecraft:bane_of_arthropods`: `minecraft:density`
+* `minecraft:impaling`: `minecraft:density`
+* `minecraft:breach`: `minecraft:density`
 
 #### `universalenchants:compatible_damage_enchantments` (default: `false`)
 
-- `minecraft:sharpness`: `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`, `minecraft:breach`
-- `minecraft:smite`: `minecraft:sharpness`
-- `minecraft:bane_of_arthropods`: `minecraft:sharpness`
-- `minecraft:impaling`: `minecraft:sharpness`
-- `minecraft:breach`: `minecraft:sharpness`
+Allows the different damage enchantments to be combined with each other.
+
+* `minecraft:sharpness`: `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`, `minecraft:breach`
+* `minecraft:smite`: `minecraft:sharpness`
+* `minecraft:bane_of_arthropods`: `minecraft:sharpness`
+* `minecraft:impaling`: `minecraft:sharpness`
+* `minecraft:breach`: `minecraft:sharpness`
 
 #### `universalenchants:compatible_protection_enchantments` (default: `false`)
 
-- `minecraft:protection`: `minecraft:blast_protection`, `minecraft:fire_protection`, `minecraft:projectile_protection`
-- `minecraft:blast_protection`: `minecraft:protection`
-- `minecraft:fire_protection`: `minecraft:protection`
-- `minecraft:projectile_protection`: `minecraft:protection`
+Allows the different protection enchantments to be combined with each other.
+
+* `minecraft:protection`: `minecraft:blast_protection`, `minecraft:fire_protection`, `minecraft:projectile_protection`
+* `minecraft:blast_protection`: `minecraft:protection`
+* `minecraft:fire_protection`: `minecraft:protection`
+* `minecraft:projectile_protection`: `minecraft:protection`
