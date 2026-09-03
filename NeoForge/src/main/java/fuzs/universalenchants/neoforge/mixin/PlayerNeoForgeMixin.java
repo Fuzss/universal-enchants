@@ -16,12 +16,9 @@ abstract class PlayerNeoForgeMixin extends LivingEntity {
         super(entityType, level);
     }
 
-    @ModifyExpressionValue(
-            method = "attack", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;canPerformAction(Lnet/neoforged/neoforge/common/ItemAbility;)Z"
-    )
-    )
+    @ModifyExpressionValue(method = "attack",
+                           at = @At(value = "INVOKE",
+                                    target = "Lnet/minecraft/world/item/ItemStack;canPerformAction(Lnet/neoforged/neoforge/common/ItemAbility;)Z"))
     public boolean attack(boolean isSweepingSupported) {
         // we cannot use the NeoForge event for controlling sweeping attacks, as it ignores all the requirements vanilla imposes,
         // which cannot easily be checked again

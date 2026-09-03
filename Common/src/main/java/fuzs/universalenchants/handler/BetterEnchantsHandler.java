@@ -7,8 +7,11 @@ import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
 import fuzs.puzzleslib.api.event.v1.data.MutableInt;
 import fuzs.puzzleslib.api.event.v1.data.MutableValue;
 import fuzs.puzzleslib.api.init.v3.registry.LookupHelper;
+import fuzs.puzzleslib.api.network.v3.PlayerSet;
+import fuzs.puzzleslib.api.network.v4.MessageSender;
 import fuzs.universalenchants.UniversalEnchants;
 import fuzs.universalenchants.config.ServerConfig;
+import fuzs.universalenchants.network.ClientboundStopUsingItemMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -28,12 +31,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class BetterEnchantsHandler {
 
-    public static void onGetProjectile(LivingEntity livingEntity, ItemStack weaponItemStack, MutableValue<ItemStack> projectileItemStack) {
-        if (!UniversalEnchants.CONFIG.get(ServerConfig.class).trueInfinity) return;
+    public static void onPickProjectile(LivingEntity livingEntity, ItemStack weaponItemStack, MutableValue<ItemStack> projectileItemStack) {
+        if (!UniversalEnchants.CONFIG.get(ServerConfig.class).trueInfinity) {
+            return;
+        }
+
         if (livingEntity.level() instanceof ServerLevel serverLevel && projectileItemStack.get().isEmpty()) {
             ItemStack itemStack = new ItemStack(Items.ARROW);
             if (EnchantmentHelper.processAmmoUse(serverLevel, weaponItemStack, itemStack, 1) == 0) {
                 projectileItemStack.accept(itemStack);
+                // It is not possible for the client to know if a projectile weapon has infinity, so it will start using the offhand item when possible (like a shield).
+                // The local player locks that used item in place, so even when the server correctly starts using the projectile weapon, the client keeps on using the wrong offhand item.
+                // To enable the server to override the wrong use item again, the locked local player fields must be manually reset.
+                if (livingEntity.getMainHandItem() == weaponItemStack && !livingEntity.getOffhandItem().isEmpty()) {
+                    MessageSender.broadcast(PlayerSet.ofEntity(livingEntity), new ClientboundStopUsingItemMessage());
+                }
             }
         }
     }

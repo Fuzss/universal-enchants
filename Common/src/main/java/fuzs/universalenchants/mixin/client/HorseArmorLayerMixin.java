@@ -24,7 +24,6 @@ abstract class HorseArmorLayerMixin extends RenderLayer<Horse, HorseModel<Horse>
         super(renderLayerParent);
     }
 
-    @Deprecated(forRemoval = true)
     @ModifyVariable(method = "render", at = @At("STORE"), ordinal = 0)
     public VertexConsumer render(VertexConsumer vertexConsumer, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, Horse horse) {
         ItemStack itemStack = horse.getBodyArmorItem();

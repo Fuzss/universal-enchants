@@ -3,6 +3,7 @@ package fuzs.universalenchants;
 import fuzs.puzzleslib.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.core.v1.context.PackRepositorySourcesContext;
+import fuzs.puzzleslib.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.api.core.v1.utility.ResourceLocationHelper;
 import fuzs.puzzleslib.api.event.v1.core.EventPhase;
 import fuzs.puzzleslib.api.event.v1.entity.living.*;
@@ -12,6 +13,7 @@ import fuzs.universalenchants.config.ServerConfig;
 import fuzs.universalenchants.handler.BetterEnchantsHandler;
 import fuzs.universalenchants.handler.ItemCompatHandler;
 import fuzs.universalenchants.init.ModRegistry;
+import fuzs.universalenchants.network.ClientboundStopUsingItemMessage;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -45,11 +47,18 @@ public class UniversalEnchants implements ModConstructor {
         UseItemEvents.TICK.register(ItemCompatHandler::onUseItemTick);
         ComputeEnchantedLootBonusCallback.EVENT.register(ItemCompatHandler::onComputeEnchantedLootBonus);
         LivingHurtCallback.EVENT.register(BetterEnchantsHandler::onLivingHurt);
+        PickProjectileCallback.EVENT.register(BetterEnchantsHandler::onPickProjectile);
         BlockEvents.FARMLAND_TRAMPLE.register(BetterEnchantsHandler::onFarmlandTrample);
         ShieldBlockCallback.EVENT.register(ItemCompatHandler::onShieldBlock);
         // run after other mods had a chance to change looting level
         LivingExperienceDropCallback.EVENT.register(EventPhase.AFTER, BetterEnchantsHandler::onLivingExperienceDrop);
         BlockEvents.DROP_EXPERIENCE.register(EventPhase.AFTER, BetterEnchantsHandler::onDropExperience);
+    }
+
+    @Override
+    public void onRegisterPayloadTypes(PayloadTypesContext context) {
+        context.optional();
+        context.playToClient(ClientboundStopUsingItemMessage.class, ClientboundStopUsingItemMessage.STREAM_CODEC);
     }
 
     @Override
