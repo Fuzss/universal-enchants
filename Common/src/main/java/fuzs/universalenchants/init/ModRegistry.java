@@ -27,6 +27,10 @@ public class ModRegistry {
         return TagKey.create(Registries.ITEM, resourceKey.location().withPrefix("secondary_enchantable/"));
     }
 
+    public static TagKey<Enchantment> getExclusiveSetEnchantmentTag(ResourceKey<Enchantment> resourceKey) {
+        return TagKey.create(Registries.ENCHANTMENT, resourceKey.location().withPrefix("exclusive_set/"));
+    }
+
     public static TagKey<Enchantment> getInclusiveSetEnchantmentTag(ResourceKey<Enchantment> resourceKey) {
         return TagKey.create(Registries.ENCHANTMENT, resourceKey.location().withPrefix("inclusive_set/"));
     }
