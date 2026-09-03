@@ -3,35 +3,35 @@ package fuzs.universalenchants.data;
 import fuzs.puzzleslib.api.data.v2.AbstractRegistriesDatapackGenerator;
 import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
 import fuzs.universalenchants.init.ModRegistry;
-import net.minecraft.advancements.critereon.DamageSourcePredicate;
-import net.minecraft.advancements.critereon.TagPredicate;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.valueproviders.ConstantFloat;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.item.enchantment.effects.AddValue;
-import net.minecraft.world.item.enchantment.effects.DamageImmunity;
-import net.minecraft.world.item.enchantment.effects.ReplaceDisk;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.enchantment.effects.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.*;
 
 import java.util.Optional;
 
+@Deprecated
 public class ModRegistriesDatapackProvider extends AbstractRegistriesDatapackGenerator<Enchantment> {
 
     public ModRegistriesDatapackProvider(DataProviderContext context) {
@@ -89,5 +89,51 @@ public class ModRegistriesDatapackProvider extends AbstractRegistriesDatapackGen
                                 1,
                                 EquipmentSlotGroup.MAINHAND))
                         .withEffect(EnchantmentEffectComponents.DAMAGE, new AddValue(LevelBasedValue.perLevel(0.5F))));
+        // Allow entities attacking with a mace. Must be a smash attack; that is copied from the Wind Burst enchantment.
+        registerEnchantment(context,
+                Enchantments.CHANNELING,
+                Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(ItemTags.TRIDENT_ENCHANTABLE),
+                                1,
+                                1,
+                                Enchantment.constantCost(25),
+                                Enchantment.constantCost(50),
+                                8,
+                                EquipmentSlotGroup.MAINHAND))
+                        .withEffect(EnchantmentEffectComponents.POST_ATTACK,
+                                EnchantmentTarget.ATTACKER,
+                                EnchantmentTarget.VICTIM,
+                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityType.LIGHTNING_BOLT.builtInRegistryHolder()),
+                                                false),
+                                        new PlaySoundEffect(SoundEvents.TRIDENT_THUNDER,
+                                                ConstantFloat.of(5.0F),
+                                                ConstantFloat.of(1.0F))),
+                                AllOfCondition.allOf(WeatherCheck.weather().setThundering(true),
+                                        LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+                                                EntityPredicate.Builder.entity()
+                                                        .located(LocationPredicate.Builder.location()
+                                                                .setCanSeeSky(true))),
+                                        AnyOfCondition.anyOf(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER,
+                                                        EntityPredicate.Builder.entity().of(EntityType.TRIDENT)),
+                                                LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.DIRECT_ATTACKER,
+                                                        EntityPredicate.Builder.entity()
+                                                                .equipment(EntityEquipmentPredicate.Builder.equipment()
+                                                                        .mainhand(ItemPredicate.Builder.item()
+                                                                                .of(Items.MACE)))
+                                                                .flags(EntityFlagsPredicate.Builder.flags()
+                                                                        .setIsFlying(false))
+                                                                .moving(MovementPredicate.fallDistance(MinMaxBounds.Doubles.atLeast(
+                                                                        1.5)))))))
+                        .withEffect(EnchantmentEffectComponents.HIT_BLOCK,
+                                AllOf.entityEffects(new SummonEntityEffect(HolderSet.direct(EntityType.LIGHTNING_BOLT.builtInRegistryHolder()),
+                                                false),
+                                        new PlaySoundEffect(SoundEvents.TRIDENT_THUNDER,
+                                                ConstantFloat.of(5.0F),
+                                                ConstantFloat.of(1.0F))),
+                                AllOfCondition.allOf(WeatherCheck.weather().setThundering(true),
+                                        LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
+                                                EntityPredicate.Builder.entity().of(EntityType.TRIDENT)),
+                                        LocationCheck.checkLocation(LocationPredicate.Builder.location()
+                                                .setCanSeeSky(true)),
+                                        LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.LIGHTNING_ROD))));
     }
 }
