@@ -52,13 +52,69 @@ Universal Enchants introduces per-enchantment override tags that are applied in 
 - `minecraft:efficiency` → `data/minecraft/tags/enchantment/inclusive_set/efficiency.json`
 - `minecraft:efficiency` → `data/minecraft/tags/enchantment/exclusive_set/efficiency.json`
 
-### Included Compatibility Data Packs (for Minecraft 1.21.1 & 1.21.10+)
-
-Universal Enchants ships with several optional data packs that relax common vanilla compatibility restrictions. Each
-pack focuses on a specific item or enchantment group.
+### Included Data Packs
 
 The packs can be enabled or disabled from the `Data Packs` screen when creating a world or via the `/datapack` command
 in existing worlds and when playing on multiplayer servers.
+
+#### Additional Item Enchantments (for Minecraft 1.21.1 & 26.1+)
+
+This section covers several optional data packs that extend which items can receive specific enchantments. These packs
+primarily expose vanilla enchantment restrictions through data-driven item tags.
+
+#### `universalenchants:additional_damage_enchantments` (default: `true`)
+
+Allows basic damage enchantments to be applied to additional weapon items.
+
+* `#minecraft:swords`: `minecraft:impaling`, `minecraft:breach`
+* `#minecraft:axes`: `minecraft:sharpness`, `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`,
+  `minecraft:breach`
+* `#c:tools/trident`: `minecraft:sharpness`, `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:breach`
+* `#c:tools/mace`: `minecraft:sharpness`, `minecraft:smite`, `minecraft:bane_of_arthropods`, `minecraft:impaling`
+* `#minecraft:spears`: `minecraft:impaling`, `minecraft:breach`
+
+#### `universalenchants:additional_weapon_enchantments` (default: `true`)
+
+Allows general weapon enchantments to be applied to additional weapon items.
+
+* `#minecraft:axes`: `minecraft:looting`, `minecraft:knockback`, `minecraft:fire_aspect`
+* `#c:tools/trident`: `minecraft:looting`, `minecraft:knockback`, `minecraft:quick_charge`, `minecraft:piercing`
+* `#c:tools/mace`: `minecraft:looting`, `minecraft:channeling`
+
+#### `universalenchants:additional_ranged_enchantments` (default: `true`)
+
+Allows ranged weapon enchantments to be applied across bows and crossbows.
+
+* `#c:tools/bow`: `minecraft:piercing`, `minecraft:multishot`, `minecraft:quick_charge`, `minecraft:looting`
+* `#c:tools/crossbow`: `minecraft:flame`, `minecraft:punch`, `minecraft:power`, `minecraft:infinity`,
+  `minecraft:looting`
+
+#### `universalenchants:additional_shield_enchantments` (default: `true`)
+
+Allows additional weapon and defensive enchantments to be applied to shields.
+
+* `#c:tools/shield`: `minecraft:thorns`, `minecraft:knockback`, `minecraft:fire_aspect`
+
+#### `universalenchants:additional_animal_enchantments` (default: `true`)
+
+Allows armor enchantments to be applied to additional animal armor.
+
+* `#c:armors/horse`: `minecraft:protection`, `minecraft:fire_protection`, `minecraft:feather_falling`,
+  `minecraft:blast_protection`, `minecraft:projectile_protection`, `minecraft:respiration`, `minecraft:thorns`,
+  `minecraft:depth_strider`, `minecraft:frost_walker`, `minecraft:binding_curse`, `minecraft:soul_speed`,
+  `minecraft:vanishing_curse`
+* `#c:armors/wolf`: `minecraft:protection`, `minecraft:fire_protection`, `minecraft:feather_falling`,
+  `minecraft:blast_protection`, `minecraft:projectile_protection`, `minecraft:respiration`, `minecraft:thorns`,
+  `minecraft:depth_strider`, `minecraft:frost_walker`, `minecraft:binding_curse`, `minecraft:soul_speed`,
+  `minecraft:vanishing_curse`
+* `#c:armors/nautilus`: `minecraft:protection`, `minecraft:fire_protection`, `minecraft:feather_falling`,
+  `minecraft:blast_protection`, `minecraft:projectile_protection`, `minecraft:thorns`, `minecraft:binding_curse`,
+  `minecraft:vanishing_curse`
+
+### Compatible Enchantments (for Minecraft 1.21.1 & 1.21.10+)
+
+This section covers several optional data packs that relax common vanilla compatibility restrictions. Each pack focuses
+on a specific item or enchantment group.
 
 #### `universalenchants:compatible_bow_enchantments` (default: `true`)
 
