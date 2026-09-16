@@ -54,7 +54,8 @@ Universal Enchants introduces per-enchantment override tags that are applied in 
 ### Included Data Packs
 
 The packs can be enabled or disabled from the `Data Packs` screen when creating a world or via the `/datapack` command
-in existing worlds and when playing on multiplayer servers.
+in existing worlds and when playing on multiplayer servers. Whether a pack is added automatically when creating a new
+world can be changed for each pack in the common config.
 
 #### Additional Item Enchantments (for Minecraft 1.21.1 & 26.1+)
 
