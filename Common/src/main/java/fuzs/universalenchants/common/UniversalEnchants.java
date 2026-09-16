@@ -10,6 +10,7 @@ import fuzs.puzzleslib.common.api.event.v1.core.EventPhase;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.*;
 import fuzs.puzzleslib.common.api.event.v1.level.BlockEvents;
 import fuzs.puzzleslib.common.api.event.v1.server.ServerResourcesLoadCallback;
+import fuzs.universalenchants.common.config.CommonConfig;
 import fuzs.universalenchants.common.config.ServerConfig;
 import fuzs.universalenchants.common.handler.BetterEnchantsHandler;
 import fuzs.universalenchants.common.handler.ItemCompatHandler;
@@ -39,7 +40,9 @@ public class UniversalEnchants implements ModConstructor {
     public static final String MOD_NAME = "Universal Enchants";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
-    public static final ConfigHolder CONFIG = ConfigHolder.builder(MOD_ID).server(ServerConfig.class);
+    public static final ConfigHolder CONFIG = ConfigHolder.builder(MOD_ID)
+            .common(CommonConfig.class)
+            .server(ServerConfig.class);
     public static final Identifier ADDITIONAL_DAMAGE_ENCHANTMENTS_ID = id("additional_damage_enchantments");
     public static final Identifier ADDITIONAL_WEAPON_ENCHANTMENTS_ID = id("additional_weapon_enchantments");
     public static final Identifier ADDITIONAL_RANGED_ENCHANTMENTS_ID = id("additional_ranged_enchantments");
@@ -76,36 +79,37 @@ public class UniversalEnchants implements ModConstructor {
 
     @Override
     public void onAddDataPackFinders(PackRepositorySourcesContext context) {
+        CommonConfig config = CONFIG.get(CommonConfig.class);
         context.registerBuiltInPack(ADDITIONAL_DAMAGE_ENCHANTMENTS_ID,
                 Component.literal("Additional Damage Enchantments"),
-                true);
+                config.damage);
         context.registerBuiltInPack(ADDITIONAL_WEAPON_ENCHANTMENTS_ID,
                 Component.literal("Additional Weapon Enchantments"),
-                true);
+                config.weapon);
         context.registerBuiltInPack(ADDITIONAL_RANGED_ENCHANTMENTS_ID,
                 Component.literal("Additional Ranged Enchantments"),
-                true);
+                config.ranged);
         context.registerBuiltInPack(ADDITIONAL_SHIELD_ENCHANTMENTS_ID,
                 Component.literal("Additional Shield Enchantments"),
-                true);
+                config.shield);
         context.registerBuiltInPack(ADDITIONAL_ANIMAL_ENCHANTMENTS_ID,
                 Component.literal("Additional Animal Enchantments"),
-                true);
+                config.animal);
         context.registerBuiltInPack(COMPATIBLE_BOW_ENCHANTMENTS_ID,
                 Component.literal("Compatible Bow Enchantments"),
-                true);
+                config.bow);
         context.registerBuiltInPack(COMPATIBLE_CROSSBOW_ENCHANTMENTS_ID,
                 Component.literal("Compatible Crossbow Enchantments"),
-                true);
+                config.crossbow);
         context.registerBuiltInPack(COMPATIBLE_MACE_ENCHANTMENTS_ID,
                 Component.literal("Compatible Mace Enchantments"),
-                true);
+                config.mace);
         context.registerBuiltInPack(COMPATIBLE_DAMAGE_ENCHANTMENTS_ID,
                 Component.literal("Compatible Damage Enchantments"),
-                false);
+                config.compatibleDamage);
         context.registerBuiltInPack(COMPATIBLE_PROTECTION_ENCHANTMENTS_ID,
                 Component.literal("Compatible Protection Enchantments"),
-                false);
+                config.protection);
     }
 
     @Override
