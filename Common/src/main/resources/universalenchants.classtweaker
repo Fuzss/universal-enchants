@@ -4,3 +4,6 @@ accessible  field   net/minecraft/world/entity/projectile/arrow/AbstractArrow   
 accessible  field   net/minecraft/client/player/LocalPlayer startedUsingItem    Z
 accessible  field   net/minecraft/client/player/LocalPlayer usingItemHand   Lnet/minecraft/world/InteractionHand;
 accessible  method  net/minecraft/world/item/enchantment/Enchantment$Builder    getEffectsList (Lnet/minecraft/core/component/DataComponentType;)Ljava/util/List;
+accessible  field   net/minecraft/world/item/enchantment/Enchantment$Builder   effectMapBuilder    Lnet/minecraft/core/component/DataComponentMap$Builder;
+accessible  class   net/minecraft/resources/RegistryLoadTask$PendingRegistration
+accessible  method  net/minecraft/resources/RegistryLoadTask$PendingRegistration <init>    (Lnet/minecraft/resources/ResourceKey;Lcom/mojang/datafixers/util/Either;Lnet/minecraft/core/RegistrationInfo;)V

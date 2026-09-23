@@ -37,13 +37,18 @@ public final class ModifyEnchantmentsHandler {
         // NO-OP
     }
 
-    public static void modifyEnchantment(ResourceKey<Enchantment> key, Enchantment.Builder builder, RegistryOps.RegistryInfoLookup lookup) {
+    public static boolean modifyEnchantment(ResourceKey<Enchantment> key, Enchantment.Builder builder, RegistryOps.RegistryInfoLookup lookup) {
         if (key == Enchantments.FROST_WALKER) {
             modifyFrostWalker(builder);
+            return true;
         } else if (key == Enchantments.POWER) {
             modifyPower(builder);
+            return true;
         } else if (key == Enchantments.CHANNELING) {
             modifyChanneling(builder, lookup);
+            return true;
+        } else {
+            return false;
         }
     }
 
