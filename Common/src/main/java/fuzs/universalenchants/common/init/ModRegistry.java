@@ -1,6 +1,6 @@
 package fuzs.universalenchants.common.init;
 
-import fuzs.puzzleslib.common.api.data.v2.AbstractDatapackRegistriesProvider;
+import fuzs.puzzleslib.common.api.init.v3.registry.ContentRegistrationHelper;
 import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import fuzs.universalenchants.common.UniversalEnchants;
 import net.minecraft.advancements.predicates.*;
@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.*;
 import net.minecraft.util.valueproviders.ConstantFloat;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -69,6 +70,7 @@ public class ModRegistry {
         HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
         HolderGetter<EntityType<?>> entityLookup = context.lookup(Registries.ENTITY_TYPE);
         HolderGetter<Enchantment> enchantmentLookup = context.lookup(Registries.ENCHANTMENT);
+        HolderGetter<DamageType> damageTypeLookup = context.lookup(Registries.DAMAGE_TYPE);
         // Allow frost walker to replace sea vegetation and itself, also remove on ground check to enable jump-sprinting across water.
         ReplaceDisk replaceDisk = new ReplaceDisk(new LevelBasedValue.Clamped(LevelBasedValue.perLevel(3.0F, 1.0F),
                 0.0F,
@@ -80,9 +82,9 @@ public class ModRegistry {
                         BlockPredicate.matchesTag(FROSTED_ICE_REPLACEABLES_BLOCK_TAG),
                         BlockPredicate.matchesFluids(Fluids.WATER),
                         BlockPredicate.unobstructed()), BlockPredicate.matchesBlocks(Blocks.FROSTED_ICE))),
-                BlockStateProvider.simple(Blocks.FROSTED_ICE),
+                BlockStateProvider.holderOf(Blocks.FROSTED_ICE),
                 Optional.of(GameEvent.BLOCK_PLACE));
-        AbstractDatapackRegistriesProvider.registerEnchantment(context,
+        ContentRegistrationHelper.registerEnchantment(context,
                 Enchantments.FROST_WALKER,
                 Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(ItemTags.FOOT_ARMOR_ENCHANTABLE),
                                 2,
@@ -95,14 +97,14 @@ public class ModRegistry {
                         .withEffect(EnchantmentEffectComponents.DAMAGE_IMMUNITY,
                                 DamageImmunity.INSTANCE,
                                 DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType()
-                                        .tag(TagPredicate.is(DamageTypeTags.BURN_FROM_STEPPING))
-                                        .tag(TagPredicate.isNot(DamageTypeTags.BYPASSES_INVULNERABILITY))))
+                                        .tag(TagPredicate.is(damageTypeLookup, DamageTypeTags.BURN_FROM_STEPPING))
+                                        .tag(TagPredicate.isNot(damageTypeLookup, DamageTypeTags.BYPASSES_INVULNERABILITY))))
                         .withEffect(EnchantmentEffectComponents.LOCATION_CHANGED, replaceDisk)
                         .withEffect(EnchantmentEffectComponents.TICK, replaceDisk,
                                 // has a chance of about 90% to tick at least once every second, which should be enough
                                 LootItemRandomChanceCondition.randomChance(0.1F)));
         // Remove the arrow entity type check, so this also works for tridents.
-        AbstractDatapackRegistriesProvider.registerEnchantment(context,
+        ContentRegistrationHelper.registerEnchantment(context,
                 Enchantments.POWER,
                 Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(ItemTags.BOW_ENCHANTABLE),
                                 10,
@@ -113,7 +115,7 @@ public class ModRegistry {
                                 EquipmentSlotGroup.MAINHAND))
                         .withEffect(EnchantmentEffectComponents.DAMAGE, new AddValue(LevelBasedValue.perLevel(0.5F))));
         // Allow entities attacking with a mace. Must be a smash attack; that is copied from the Wind Burst enchantment.
-        AbstractDatapackRegistriesProvider.registerEnchantment(context,
+        ContentRegistrationHelper.registerEnchantment(context,
                 Enchantments.CHANNELING,
                 Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(ItemTags.TRIDENT_ENCHANTABLE),
                                 1,

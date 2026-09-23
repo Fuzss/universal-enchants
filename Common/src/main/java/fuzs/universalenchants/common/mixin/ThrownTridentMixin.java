@@ -1,5 +1,6 @@
 package fuzs.universalenchants.common.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,9 +13,7 @@ import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 
@@ -36,11 +35,10 @@ abstract class ThrownTridentMixin extends AbstractArrow {
         return pickupItemStack;
     }
 
-    @Inject(method = "onHitEntity",
-            at = @At(value = "INVOKE",
-                     target = "Lnet/minecraft/world/entity/projectile/arrow/ThrownTrident;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;"),
-            cancellable = true)
-    protected void onHitEntity(EntityHitResult hitResult, CallbackInfo callback) {
+    @ModifyExpressionValue(method = "onHitEntity",
+                           at = @At(value = "INVOKE",
+                                    target = "Lnet/minecraft/world/entity/Entity;projectileReceivesSideEffectsOnHit(Z)Z"))
+    protected boolean onHitEntity(boolean projectileReceivesSideEffectsOnHit, EntityHitResult hitResult) {
         // support piercing for tridents, since the super call to AbstractArrow is missing
         if (this.getPierceLevel() > 0) {
             if (this.piercingIgnoreEntityIds == null) {
@@ -54,8 +52,10 @@ abstract class ThrownTridentMixin extends AbstractArrow {
             this.piercingIgnoreEntityIds.add(hitResult.getEntity().getId());
             if (this.piercingIgnoreEntityIds.size() <= this.getPierceLevel()) {
                 this.dealtDamage = false;
-                callback.cancel();
+                return false;
             }
         }
+
+        return projectileReceivesSideEffectsOnHit;
     }
 }

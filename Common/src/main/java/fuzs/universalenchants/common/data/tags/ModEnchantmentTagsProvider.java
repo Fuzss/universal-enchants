@@ -1,7 +1,7 @@
 package fuzs.universalenchants.common.data.tags;
 
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
-import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v3.tags.AbstractTagsProvider;
 import fuzs.universalenchants.common.init.ModRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-public abstract class ModEnchantmentTagsProvider extends AbstractTagProvider<Enchantment> {
+public abstract class ModEnchantmentTagsProvider extends AbstractTagsProvider<Enchantment> {
 
     public ModEnchantmentTagsProvider(DataProviderContext context) {
         super(Registries.ENCHANTMENT, context);

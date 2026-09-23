@@ -51,7 +51,7 @@ public class BetterEnchantsHandler {
         if (!UniversalEnchants.CONFIG.get(ServerConfig.class).noProjectileImmunity) return EventResult.PASS;
         // immediately reset damage immunity after being hit by any projectile, fixes multishot
         if (!(entity instanceof Player) && source.is(DamageTypeTags.IS_PROJECTILE)) {
-            entity.invulnerableTime = 0;
+            entity.setInvulnerableTime(0);
         }
 
         return EventResult.PASS;
