@@ -7,7 +7,6 @@ import fuzs.universalenchants.common.data.tags.ModBlockTagsProvider;
 import fuzs.universalenchants.common.data.tags.ModEnchantmentTagsProvider;
 import fuzs.universalenchants.common.data.tags.ModItemTagsProvider;
 import fuzs.universalenchants.common.handler.BetterEnchantsHandler;
-import fuzs.universalenchants.common.init.ModRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.bus.api.IEventBus;
@@ -22,7 +21,6 @@ public class UniversalEnchantsNeoForge {
         ModConstructor.construct(UniversalEnchants.MOD_ID, UniversalEnchants::new);
         registerEventHandlers(NeoForge.EVENT_BUS);
         DataProviderBuilder.of(UniversalEnchants.MOD_ID)
-                .setRegistrySetBuilder(ModRegistry.REGISTRY_SET_BUILDER)
                 .addProvider(ModItemTagsProvider.Impl::new,
                         ModEnchantmentTagsProvider.Impl::new,
                         ModBlockTagsProvider::new);

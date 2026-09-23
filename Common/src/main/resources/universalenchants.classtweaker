@@ -3,3 +3,4 @@ accessible  field   net/minecraft/world/entity/projectile/arrow/AbstractArrow   
 accessible  field   net/minecraft/world/entity/projectile/arrow/AbstractArrow   piercedAndKilledEntities    Ljava/util/List;
 accessible  field   net/minecraft/client/player/LocalPlayer startedUsingItem    Z
 accessible  field   net/minecraft/client/player/LocalPlayer usingItemHand   Lnet/minecraft/world/InteractionHand;
+accessible  method  net/minecraft/world/item/enchantment/Enchantment$Builder    getEffectsList (Lnet/minecraft/core/component/DataComponentType;)Ljava/util/List;
