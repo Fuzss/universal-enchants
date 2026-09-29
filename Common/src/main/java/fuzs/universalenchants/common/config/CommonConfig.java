@@ -4,10 +4,23 @@ import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
 
 public class CommonConfig implements ConfigCore {
+    private static final String CATEGORY_ENCHANTMENT_ADJUSTMENTS = "enchantment_adjustments";
     private static final String CATEGORY_ADDITIONAL_ENCHANTS_DATA_PACKS = "additional_enchants_data_packs";
     private static final String CATEGORY_COMPATIBILITY_DATA_PACKS = "compatibility_data_packs";
     private static final String HINT_NEW_WORLDS_ONLY = "Automatically add the corresponding data pack when creating a new world.";
 
+    @Config(category = CATEGORY_ENCHANTMENT_ADJUSTMENTS,
+            description = "Frost walker regenerates ice blocks while standing still, destroys water plants, and works while jumping.",
+            worldRestart = true)
+    public boolean betterFrostWalker = true;
+    @Config(category = CATEGORY_ENCHANTMENT_ADJUSTMENTS,
+            description = "Power also affects tridents in addition to bows.",
+            worldRestart = true)
+    public boolean betterPower = true;
+    @Config(category = CATEGORY_ENCHANTMENT_ADJUSTMENTS,
+            description = "Channeling also triggers from smash attacks with a mace in addition to tridents.",
+            worldRestart = true)
+    public boolean betterChanneling = true;
     @Config(category = CATEGORY_ADDITIONAL_ENCHANTS_DATA_PACKS, description = {
             "Allows basic damage enchantments to be applied to additional weapon items.", HINT_NEW_WORLDS_ONLY
     }, worldRestart = true)

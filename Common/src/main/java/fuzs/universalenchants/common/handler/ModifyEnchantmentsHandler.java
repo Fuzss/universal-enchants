@@ -1,5 +1,7 @@
 package fuzs.universalenchants.common.handler;
 
+import fuzs.universalenchants.common.UniversalEnchants;
+import fuzs.universalenchants.common.config.CommonConfig;
 import fuzs.universalenchants.common.init.ModRegistry;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.predicates.LocationPredicate;
@@ -39,20 +41,21 @@ public final class ModifyEnchantmentsHandler {
 
     public static boolean modifyEnchantment(ResourceKey<Enchantment> key, Enchantment.Builder builder, RegistryOps.RegistryInfoLookup lookup) {
         if (key == Enchantments.FROST_WALKER) {
-            modifyFrostWalker(builder);
-            return true;
+            return modifyFrostWalker(builder);
         } else if (key == Enchantments.POWER) {
-            modifyPower(builder);
-            return true;
+            return modifyPower(builder);
         } else if (key == Enchantments.CHANNELING) {
-            modifyChanneling(builder, lookup);
-            return true;
+            return modifyChanneling(builder, lookup);
         } else {
             return false;
         }
     }
 
-    private static void modifyFrostWalker(Enchantment.Builder builder) {
+    private static boolean modifyFrostWalker(Enchantment.Builder builder) {
+        if (!UniversalEnchants.CONFIG.get(CommonConfig.class).betterFrostWalker) {
+            return false;
+        }
+
         // Allow frost walker to replace sea vegetation and itself, also remove on ground check to enable jump-sprinting across water.
         ReplaceDisk replaceDisk = new ReplaceDisk(new LevelBasedValue.Clamped(LevelBasedValue.perLevel(3.0F, 1.0F),
                 0.0F,
@@ -71,15 +74,25 @@ public final class ModifyEnchantmentsHandler {
         builder.withEffect(EnchantmentEffectComponents.TICK, replaceDisk,
                 // has a chance of about 90% to tick at least once every second, which should be enough
                 LootItemRandomChanceCondition.randomChance(0.1F));
+        return true;
     }
 
-    private static void modifyPower(Enchantment.Builder builder) {
+    private static boolean modifyPower(Enchantment.Builder builder) {
+        if (!UniversalEnchants.CONFIG.get(CommonConfig.class).betterPower) {
+            return false;
+        }
+
         // Remove the arrow entity type check, so this also works for tridents.
         builder.getEffectsList(EnchantmentEffectComponents.DAMAGE).clear();
         builder.withEffect(EnchantmentEffectComponents.DAMAGE, new AddValue(LevelBasedValue.perLevel(0.5F)));
+        return true;
     }
 
-    private static void modifyChanneling(Enchantment.Builder builder, RegistryOps.RegistryInfoLookup lookup) {
+    private static boolean modifyChanneling(Enchantment.Builder builder, RegistryOps.RegistryInfoLookup lookup) {
+        if (!UniversalEnchants.CONFIG.get(CommonConfig.class).betterChanneling) {
+            return false;
+        }
+
         // Allow entities attacking with a mace. Must be a smash attack; that is copied from the Wind Burst enchantment.
         LootItemCondition.Builder condition = AllOfCondition.allOf(WeatherCheck.weather().setThundering(true),
                 LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
@@ -105,5 +118,6 @@ public final class ModifyEnchantmentsHandler {
                                 ConstantFloat.of(5.0F),
                                 ConstantFloat.of(1.0F))),
                 condition);
+        return true;
     }
 }
