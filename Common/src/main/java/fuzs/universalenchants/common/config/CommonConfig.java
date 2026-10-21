@@ -50,15 +50,17 @@ public class CommonConfig implements ConfigCore {
     }, worldRestart = true)
     public boolean crossbow = true;
     @Config(category = CATEGORY_COMPATIBILITY_DATA_PACKS, description = {
-            "Allows the mace's damage enchantments to be combined with minecraft:density.", HINT_NEW_WORLDS_ONLY
+            "Allows the different damage enchantments to be combined with density.", HINT_NEW_WORLDS_ONLY
     }, worldRestart = true)
     public boolean mace = true;
     @Config(name = "damage", category = CATEGORY_COMPATIBILITY_DATA_PACKS, description = {
-            "Allows the different damage enchantments to be combined with each other.", HINT_NEW_WORLDS_ONLY
+            "Allows the specialized damage enchantments to be combined with sharpness. The specialized enchantments remain mutually exclusive with each other.",
+            HINT_NEW_WORLDS_ONLY
     }, worldRestart = true)
     public boolean compatibleDamage = false;
     @Config(category = CATEGORY_COMPATIBILITY_DATA_PACKS, description = {
-            "Allows the different protection enchantments to be combined with each other.", HINT_NEW_WORLDS_ONLY
+            "Allows the specialized protection enchantments to be combined with protection. The specialized enchantments remain mutually exclusive with each other.",
+            HINT_NEW_WORLDS_ONLY
     }, worldRestart = true)
     public boolean protection = false;
 }
